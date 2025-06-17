@@ -1,24 +1,32 @@
+// src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { auth, db } from "../firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [ user, setUser ] = useState(null);
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
 
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-        });
-        return () => unsub();
-    }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const ref = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(ref);
+        setUser(currentUser);
+        setRole(snap.exists() ? snap.data().role : null);
+      } else {
+        setUser(null);
+        setRole(null);
+      }
+    });
 
-    return(
-        <AuthContext.Provider value={{ user }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return () => unsubscribe();
+  }, []);
+
+  return <AuthContext.Provider value={{ user, role }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);

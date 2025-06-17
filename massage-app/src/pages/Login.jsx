@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../firebase/config";
+import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {

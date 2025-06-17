@@ -1,39 +1,23 @@
 // src/components/TherapistDashboard.jsx
-import { useEffect, useState } from "react";
-import { db } from "../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
 
 const TherapistDashboard = () => {
-  const [appointments, setAppointments] = useState([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "appointments"));
-        const data = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAppointments(data);
-      } catch (error) {
-        console.error("Error loading appointments:", error);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
 
   return (
     <div>
-      <h2>Therapist Dashboard</h2>
-      <ul>
-        {appointments.map((app) => (
-          <li key={app.id}>
-            <strong>{app.name}</strong> - {app.service} <br />
-            {app.date} at {app.time}
-          </li>
-        ))}
-      </ul>
+      <h2>Welcome, {user?.email}</h2>
+      <p>This is the therapist dashboard.</p>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
