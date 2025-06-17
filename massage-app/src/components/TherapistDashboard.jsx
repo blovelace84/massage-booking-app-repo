@@ -8,10 +8,18 @@ const TherapistDashboard = () => {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      const snapshot = await getDocs(collection(db, "appointments"));
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setAppointments(data);
+      try {
+        const snapshot = await getDocs(collection(db, "appointments"));
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAppointments(data);
+      } catch (error) {
+        console.error("Error loading appointments:", error);
+      }
     };
+
     fetchAppointments();
   }, []);
 
@@ -19,9 +27,10 @@ const TherapistDashboard = () => {
     <div>
       <h2>Therapist Dashboard</h2>
       <ul>
-        {appointments.map(app => (
+        {appointments.map((app) => (
           <li key={app.id}>
-            {app.name} - {app.service} on {app.date} at {app.time}
+            <strong>{app.name}</strong> - {app.service} <br />
+            {app.date} at {app.time}
           </li>
         ))}
       </ul>
