@@ -1,0 +1,29 @@
+/* src/pages/Home.css */
+
+.home-container {
+  text-align: center;
+  padding: 3rem;
+  background-color: #fef6f0;
+  min-height: 100vh;
+}
+
+.home-heading {
+  font-size: 2.5rem;
+  color: #734d26;
+}
+
+.home-text {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #5a3e1b;
+}
+
+.home-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #a3703d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
