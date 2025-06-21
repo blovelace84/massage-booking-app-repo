@@ -1,0 +1,23 @@
+/* src/components/Navbar.css */
+
+.navbar {
+  padding: 1rem;
+  background-color: #eee;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+.navbar-button {
+  background-color: transparent;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  font-weight: bold;
+}
